@@ -38,7 +38,7 @@ jobs:
           sed -i -E "
           s/^SPK_VERS = [0-9]+\.[0-9]+\.[0-9]+/SPK_VERS = ${steps.cloudflared-version.outputs.VERSION}/;
           s/^SPK_REV = [0-9]+/SPK_REV = & + 1/e
-          " filename
+          " spk/cloudflared/Makefile
 
       
       - name: Build all-supported
