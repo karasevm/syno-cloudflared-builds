@@ -2,6 +2,8 @@ name: Main
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron: "0 0 */10 * *"
   push:
     # Sequence of patterns matched against refs/tags
     tags:
@@ -52,11 +54,12 @@ jobs:
       
       - name: Update cloudflared version spk
         if: steps.cloudflared-version.outputs.tag != steps.syno-cloudflared-version.outputs.tag
-        run: sed -i -E "
-          s/^SPK_VERS = [0-9]+\.[0-9]+\.[0-9]+/SPK_VERS = ${{ steps.cloudflared-version.outputs.tag }}/;
-          s/^SPK_REV = [0-9]+/SPK_REV = & + 1/e
-          " spksrc/spk/cloudflared/Makefile
+        run: sed -i "s/^SPK_VERS = [0-9]+\.[0-9]+\.[0-9]+/SPK_VERS = ${{ steps.cloudflared-version.outputs.tag }}/" spksrc/spk/cloudflared/Makefile
 
+      - name: Bump cloudflared revision
+        if: steps.cloudflared-version.outputs.tag != steps.syno-cloudflared-version.outputs.tag
+        run: sed -i -E 's/^(SPK_REV = )([0-9]+)/echo "\1$((\2 + 1))"/e' spksrc/spk/cloudflared/Makefile
+        
       - name: Update digests
         if: steps.cloudflared-version.outputs.tag != steps.syno-cloudflared-version.outputs.tag
         run: cd spksrc/cross/cloudflared && make digests
