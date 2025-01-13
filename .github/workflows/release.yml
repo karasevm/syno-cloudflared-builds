@@ -15,23 +15,6 @@ jobs:
     container: ghcr.io/synocommunity/spksrc
     name: Release
     steps:
-      - name: Pull synocommunity
-        uses: GuillaumeFalourd/clone-github-repo-action@v2.3
-        with:
-          depth: 1
-          branch: 'master'
-          owner: 'SynoCommunity'
-          repository: 'spksrc'
-          
-      - name: Prepare build
-        run: cd spksrc/ && make setup
-
-      - name: Cache 
-        uses: actions/cache@v4
-        with:
-          path: spksrc/distrib
-          key: 1
-          
       - name: Get latest cloudflared version
         uses: oprypin/find-latest-tag@v1
         with:
@@ -46,15 +29,34 @@ jobs:
           repository: karasevm/syno-cloudflared-builds
           releases-only: true
         id: syno-cloudflared-version
-      
+        
+      - name: Pull synocommunity
+        if: steps.cloudflared-version.outputs.tag != steps.syno-cloudflared-version.outputs.tag
+        uses: GuillaumeFalourd/clone-github-repo-action@v2.3
+        with:
+          depth: 1
+          branch: 'master'
+          owner: 'SynoCommunity'
+          repository: 'spksrc'
           
+      - name: Prepare build
+        if: steps.cloudflared-version.outputs.tag != steps.syno-cloudflared-version.outputs.tag
+        run: cd spksrc/ && make setup
+
+      - name: Cache 
+        if: steps.cloudflared-version.outputs.tag != steps.syno-cloudflared-version.outputs.tag
+        uses: actions/cache@v4
+        with:
+          path: spksrc/distrib
+          key: 1
+      
       - name: Update cloudflared version cross
         if: steps.cloudflared-version.outputs.tag != steps.syno-cloudflared-version.outputs.tag
         run: sed -i "s/^PKG_VERS = [0-9]\+\.[0-9]\+\.[0-9]\+/PKG_VERS = ${{ steps.cloudflared-version.outputs.tag }}/" spksrc/cross/cloudflared/Makefile
       
       - name: Update cloudflared version spk
         if: steps.cloudflared-version.outputs.tag != steps.syno-cloudflared-version.outputs.tag
-        run: sed -i "s/^SPK_VERS = [0-9]+\.[0-9]+\.[0-9]+/SPK_VERS = ${{ steps.cloudflared-version.outputs.tag }}/" spksrc/spk/cloudflared/Makefile
+        run: sed -i "s/^SPK_VERS = [0-9]\+\.[0-9]\+\.[0-9]\+/SPK_VERS = ${{ steps.cloudflared-version.outputs.tag }}/" spksrc/spk/cloudflared/Makefile
 
       - name: Bump cloudflared revision
         if: steps.cloudflared-version.outputs.tag != steps.syno-cloudflared-version.outputs.tag
