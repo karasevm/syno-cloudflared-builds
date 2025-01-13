@@ -34,6 +34,7 @@ jobs:
 
       - name: Get latest built version
         uses: oprypin/find-latest-tag@v1
+        continue-on-error: true
         with:
           repository: karasevm/syno-cloudflared-builds
           releases-only: true
@@ -79,6 +80,7 @@ jobs:
         id: cloudflared-version
 
       - name: Get latest built version
+        continue-on-error: true
         uses: oprypin/find-latest-tag@v1
         with:
           repository: karasevm/syno-cloudflared-builds
