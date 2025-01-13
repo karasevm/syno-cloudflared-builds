@@ -54,7 +54,7 @@ jobs:
 
       - name: Update digests
         if: steps.cloudflared-version.outputs.tag != steps.syno-cloudflared-version.outputs.tag
-        run: cd spksrc/cross && make digests
+        run: cd spksrc/cross/cloudflared && make digests
         
       - name: Build all-supported
         if: steps.cloudflared-version.outputs.tag != steps.syno-cloudflared-version.outputs.tag
