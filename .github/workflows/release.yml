@@ -75,7 +75,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: packages
-          path: spksrc/packages/
+          path: spksrc/packages/*
           
   publish:
     name: Publish release
@@ -107,6 +107,7 @@ jobs:
         if: steps.cloudflared-version.outputs.tag != steps.syno-cloudflared-version.outputs.tag
         run: |
           {
+            cd packages/*
             echo 'SUMS<<EOF'
             find . -type f -exec sha256sum {} \;
             echo EOF
@@ -122,7 +123,7 @@ jobs:
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: packages/packages/*
+          file: packages/*
           tag: ${{ steps.cloudflared-version.outputs.tag }}
           overwrite: true
           body: ${{ steps.sha256.outputs.SUMS }}
