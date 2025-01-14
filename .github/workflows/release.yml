@@ -100,8 +100,6 @@ jobs:
       - name: Download All Artifacts
         uses: actions/download-artifact@v4
         if: steps.cloudflared-version.outputs.tag != steps.syno-cloudflared-version.outputs.tag
-        with:
-          path: packages
           
       - name: Calculate sha256
         if: steps.cloudflared-version.outputs.tag != steps.syno-cloudflared-version.outputs.tag
