@@ -1,0 +1,2 @@
+Automated builds of the cloudflared package for the Synology DSM platform. Uses [SynoCommunity](https://github.com/SynoCommunity/spksrc) build environment and the latest realease source from the [cloudflared repo](https://github.com/cloudflare/cloudflared).   
+**WARNING:** Builds are not tested, they may have unexpected bugs or may not work at all. Always keep backups of important data before installing.
