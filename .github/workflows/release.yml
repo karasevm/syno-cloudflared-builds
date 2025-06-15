@@ -47,8 +47,8 @@ jobs:
         if: steps.cloudflared-version.outputs.tag != steps.syno-cloudflared-version.outputs.tag
         uses: actions/cache@v4
         with:
-          path: spksrc/distrib
-          key: 1
+          path: spksrc/distrib/toolchain
+          key: 2
       
       - name: Update cloudflared version cross
         if: steps.cloudflared-version.outputs.tag != steps.syno-cloudflared-version.outputs.tag
