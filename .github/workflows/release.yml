@@ -122,5 +122,6 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           artifacts: packages/*
-          tag: ${{ steps.cloudflared-version.outputs.tag }}-test
+          tag: ${{ steps.cloudflared-version.outputs.tag }}-1
+          immutableCreate: true
           body: ${{ steps.sha256.outputs.SUMS }}
