@@ -21,6 +21,8 @@ jobs:
           repository: cloudflare/cloudflared
           releases-only: true
         id: cloudflared-version
+      
+      - run: echo "cloudflared is at version ${{ steps.cloudflared-version.outputs.tag }}"
 
       - name: Get latest built version
         uses: oprypin/find-latest-tag@v1
@@ -29,7 +31,9 @@ jobs:
           repository: karasevm/syno-cloudflared-builds
           releases-only: true
         id: syno-cloudflared-version
-        
+      
+      - run: echo "syno-cloudflared is at version ${{ steps.syno-cloudflared-version.outputs.tag }}"
+
       - name: Pull synocommunity
         if: steps.cloudflared-version.outputs.tag != steps.syno-cloudflared-version.outputs.tag
         uses: GuillaumeFalourd/clone-github-repo-action@v2.3
@@ -89,6 +93,8 @@ jobs:
           releases-only: true
         id: cloudflared-version
 
+      - run: echo "cloudflared is at version ${{ steps.cloudflared-version.outputs.tag }}"
+
       - name: Get latest built version
         continue-on-error: true
         uses: oprypin/find-latest-tag@v1
@@ -97,6 +103,8 @@ jobs:
           releases-only: true
         id: syno-cloudflared-version
         
+      - run: echo "syno-cloudflared is at version ${{ steps.syno-cloudflared-version.outputs.tag }}"
+
       - name: Download All Artifacts
         uses: actions/download-artifact@v4
         if: steps.cloudflared-version.outputs.tag != steps.syno-cloudflared-version.outputs.tag
