@@ -16,7 +16,7 @@ jobs:
     name: Release
     steps:
       - name: Get latest cloudflared version
-        uses: oprypin/find-latest-tag@v1
+        uses: oprypin/find-latest-tag@6957ac556fa6d349727ecabfcaaf9f8e5ee37124
         with:
           repository: cloudflare/cloudflared
           releases-only: true
@@ -25,7 +25,7 @@ jobs:
       - run: echo "cloudflared is at version ${{ steps.cloudflared-version.outputs.tag }}"
 
       - name: Get latest built version
-        uses: oprypin/find-latest-tag@v1
+        uses: oprypin/find-latest-tag@6957ac556fa6d349727ecabfcaaf9f8e5ee37124
         continue-on-error: true
         with:
           repository: karasevm/syno-cloudflared-builds
@@ -36,7 +36,7 @@ jobs:
 
       - name: Pull synocommunity
         if: steps.cloudflared-version.outputs.tag != steps.syno-cloudflared-version.outputs.tag
-        uses: GuillaumeFalourd/clone-github-repo-action@v2.3
+        uses: GuillaumeFalourd/clone-github-repo-action@19817562c346ff60f9935158dede6c5ece8fd0ac
         with:
           depth: 1
           branch: 'master'
@@ -49,7 +49,7 @@ jobs:
 
       - name: Cache 
         if: steps.cloudflared-version.outputs.tag != steps.syno-cloudflared-version.outputs.tag
-        uses: actions/cache@v4
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
         with:
           path: spksrc/distrib/toolchain
           key: 2
@@ -76,7 +76,7 @@ jobs:
         
       - name: Upload Artifact
         if: steps.cloudflared-version.outputs.tag != steps.syno-cloudflared-version.outputs.tag
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
           name: packages
           path: spksrc/packages/*
@@ -87,7 +87,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Get latest cloudflared version
-        uses: oprypin/find-latest-tag@v1
+        uses: oprypin/find-latest-tag@6957ac556fa6d349727ecabfcaaf9f8e5ee37124
         with:
           repository: cloudflare/cloudflared
           releases-only: true
@@ -97,7 +97,7 @@ jobs:
 
       - name: Get latest built version
         continue-on-error: true
-        uses: oprypin/find-latest-tag@v1
+        uses: oprypin/find-latest-tag@6957ac556fa6d349727ecabfcaaf9f8e5ee37124
         with:
           repository: karasevm/syno-cloudflared-builds
           releases-only: true
@@ -106,7 +106,7 @@ jobs:
       - run: echo "syno-cloudflared is at version ${{ steps.syno-cloudflared-version.outputs.tag }}"
 
       - name: Download All Artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
         if: steps.cloudflared-version.outputs.tag != steps.syno-cloudflared-version.outputs.tag
           
       - name: Calculate sha256
@@ -126,7 +126,7 @@ jobs:
           
       - name: Release
         if: steps.cloudflared-version.outputs.tag != steps.syno-cloudflared-version.outputs.tag
-        uses: ncipollo/release-action@v1.20.0
+        uses: ncipollo/release-action@339a81892b84b4eeb0f6e744e4574d79d0d9b8dd
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           artifacts: packages/*
