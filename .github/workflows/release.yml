@@ -36,7 +36,7 @@ jobs:
 
       - name: Pull synocommunity
         if: steps.cloudflared-version.outputs.tag != steps.syno-cloudflared-version.outputs.tag
-        uses: GuillaumeFalourd/clone-github-repo-action@19817562c346ff60f9935158dede6c5ece8fd0ac
+        uses: GuillaumeFalourd/clone-github-repo-action@62795acaa4a02f89824de75c7025459a9cabaa45
         with:
           depth: 1
           branch: 'master'
