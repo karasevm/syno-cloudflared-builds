@@ -2,6 +2,11 @@ name: Main
 
 on:
   workflow_dispatch:
+    inputs:
+      suffix:
+          description: 'Version suffix'
+          required: false
+          type: string
   schedule:
     - cron: "0 0 */1 * *"
   push:
@@ -130,6 +135,6 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           artifacts: ./*
-          tag: ${{ steps.cloudflared-version.outputs.tag }}
+          tag: ${{ steps.cloudflared-version.outputs.tag }}${{ inputs.suffix }} 
           immutableCreate: true
           body: ${{ steps.sha256.outputs.SUMS }}
