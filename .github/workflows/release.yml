@@ -113,6 +113,7 @@ jobs:
         if: steps.cloudflared-version.outputs.tag != steps.syno-cloudflared-version.outputs.tag
         run: |
           {
+            ls
             cd packages
             echo 'SUMS<<EOF'
             find . -type f -exec sha256sum {} \;
